@@ -400,7 +400,20 @@ async def main():
     
     try:
         print(f"원격 SSH MCP 서버 시작: {ssh_config['hostname']}:{ssh_config.get('port', 22)}")
-        await server.server.run_stdio()
+        
+        # stdio_server 컨텍스트 매니저 사용
+        from mcp.server.stdio import stdio_server
+        
+        # 초기화 옵션 생성
+        initialization_options = server.server.create_initialization_options()
+        
+        # 서버 실행
+        async with stdio_server() as (read_stream, write_stream):
+            await server.server.run(
+                read_stream,
+                write_stream,
+                initialization_options
+            )
     finally:
         # 연결 종료
         await server.fs.remote_close()
