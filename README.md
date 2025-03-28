@@ -1,40 +1,40 @@
-# Remote SSH MCP 서버
+# Remote SSH MCP Server
 
-원격 SSH 서버의 파일 시스템에 접근하는 MCP(Message Control Protocol) 서버 구현입니다. 이 프로젝트는 SSH를 통해 원격 서버에 연결하여 파일 시스템을 관리하는 기능을 제공합니다.
+An implementation of an MCP (Message Control Protocol) server that accesses a remote file system through SSH. This project provides functionality to connect to remote servers via SSH and manage their file systems.
 
-## 기능
+## Features
 
-- SSH를 통한 원격 파일 시스템 접근
-- 원격 파일 읽기/쓰기
-- 원격 디렉토리 리스팅
-- 파일 검색
-- 원격 명령어 실행
-- MCP 프로토콜 지원
+- Remote file system access via SSH
+- Remote file reading/writing
+- Remote directory listing
+- File searching
+- Remote command execution
+- MCP protocol support
 
-## 요구사항
+## Requirements
 
 - Python 3.7+
-- paramiko 라이브러리
-- mcp 패키지
+- paramiko library
+- mcp package
 
-## 설치
+## Installation
 
-필요한 라이브러리 설치:
+Install the required libraries:
 ```bash
 pip install paramiko mcp
 ```
 
-## 사용 방법
+## Usage
 
-### 명령행에서 직접 실행
+### Running from the Command Line
 
 ```bash
 python main.py --hostname example.com --port 22 --username user --password pass --base-path /home/user
 ```
 
-### 설정 파일 사용
+### Using a Configuration File
 
-1. SSH 설정 파일(예: `ssh_config.json`) 생성:
+1. Create an SSH configuration file (e.g., `ssh_config.json`):
 
 ```json
 {
@@ -46,51 +46,52 @@ python main.py --hostname example.com --port 22 --username user --password pass 
 }
 ```
 
-2. 설정 파일을 사용하여 실행:
+2. Run using the configuration file:
 
 ```bash
 python main.py --config ssh_config.json
 ```
 
-### MCP 설정 파일
+### MCP Configuration File
 
-MCP 서버를 다른 MCP 클라이언트와 통합하려면 다음과 같은 형식의 설정 파일을 사용할 수 있습니다:
+To integrate the MCP server with other MCP clients, you can use a configuration file in the following format:
 
 ```json
 {
   "mcpServers": {
     "remote-ssh-file-server": {
       "command": "python",
-      "args": ["/path/to/py-mcp-ssh/main.py", "--config", "/path/to/py-mcp-ssh/ssh_config.json"]
+      "args": ["main.py", "--config", "ssh_config.json"],
+      "cwd": "/path/to/py-mcp-ssh"
     }
   }
 }
 ```
 
-## 명령행 옵션
+## Command Line Options
 
-| 옵션 | 설명 |
+| Option | Description |
 |------|------|
-| `--config` | SSH 설정 JSON 파일 경로 |
-| `--hostname` | SSH 서버 호스트명 |
-| `--port` | SSH 서버 포트 (기본값: 22) |
-| `--username` | SSH 사용자 이름 |
-| `--password` | SSH 비밀번호 |
-| `--key-file` | SSH 키 파일 경로 |
-| `--base-path` | 기본 작업 디렉토리 (기본값: /) |
+| `--config` | Path to SSH configuration JSON file |
+| `--hostname` | SSH server hostname |
+| `--port` | SSH server port (default: 22) |
+| `--username` | SSH username |
+| `--password` | SSH password |
+| `--key-file` | Path to SSH key file |
+| `--base-path` | Base working directory (default: /) |
 
-## MCP API 목록
+## MCP API List
 
-| API 이름 | 설명 |
+| API Name | Description |
 |----------|------|
-| `remote_read_file` | 원격 파일 읽기 |
-| `remote_write_file` | 원격 파일 쓰기 |
-| `remote_list_directory` | 원격 디렉토리 내용 나열 |
-| `remote_search_files` | 원격 파일 검색 |
-| `remote_execute_command` | 원격 서버에서 명령어 실행 |
+| `remote_read_file` | Read a remote file |
+| `remote_write_file` | Write to a remote file |
+| `remote_list_directory` | List the contents of a remote directory |
+| `remote_search_files` | Search for files on the remote server |
+| `remote_execute_command` | Execute a command on the remote server |
 
-## 보안 고려사항
+## Security Considerations
 
-- SSH 패스워드 대신 키 파일 인증을 사용하는 것이 보안상 좋습니다.
-- 설정 파일에 비밀번호를 평문으로 저장하지 않는 것이 좋습니다.
-- `base_path`를 루트(/)가 아닌 특정 사용자 디렉토리로 제한하여 보안을 강화할 수 있습니다.
+- Using key file authentication instead of password is better for security.
+- Avoid storing passwords as plaintext in configuration files.
+- Restrict `base_path` to a specific user directory instead of root (/) to enhance security.
